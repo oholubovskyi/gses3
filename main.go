@@ -23,7 +23,7 @@ func main() {
 	registerSubscriptionRoutes(*config)
 	registerRateRoutes(*config)
 
-	http.ListenAndServe(config.Server.Port, nil)
+	http.ListenAndServe(config.Server.Host+":"+config.Server.Port, nil)
 }
 
 func loadConfig(file string) (*config.Config, error) {
