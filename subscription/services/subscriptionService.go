@@ -28,7 +28,10 @@ func (s *SubscriptionService) Subscribe(email string) error {
 	}
 
 	if !*isExists {
-		s.subscribtionRepo.AddEmail(email)
+		err = s.subscribtionRepo.AddEmail(email)
+		if err != nil {
+			return err
+		}
 
 		return nil
 	}
