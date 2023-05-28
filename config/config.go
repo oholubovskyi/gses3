@@ -11,11 +11,11 @@ type Config struct {
 		SendEmails string `json:"sendEmails"`
 	} `json:"routes"`
 	Storage struct {
-		Subscriptions string `json:"subscribtions"`
+		Subscriptions string `json:"subscriptions"`
 	} `json:"storage"`
 	Smtp struct {
 		SmtpServer string `json:"smtpServer"`
-		SmtpPort   int `json:"smtpPort"`
+		SmtpPort   int    `json:"smtpPort"`
 		Sender     string `json:"sender"`
 		Password   string `json:"password"`
 	} `json:"smtp"`
