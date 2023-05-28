@@ -1,0 +1,21 @@
+{
+    "server": {
+      "host": "localhost",
+      "port": ":8080"
+    },
+    "routes": {
+      "rate": "/api/rate",
+      "subscribe": "/api/subscribe",
+      "sendEmails": "/api/sendEmails"
+    },
+    "storage": {
+      "subscriptions": "subscription/storage/subscriptions.json"
+    },
+    "smtp": {
+      "smtpServer": "smtp.example.com",
+      "smtpPort": 587,
+      "sender": "sender@example.com",
+      "password": "my-random-password"
+    }
+  }
+  
