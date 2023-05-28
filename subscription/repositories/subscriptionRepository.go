@@ -3,10 +3,10 @@ package repositories
 import (
 	"encoding/json"
 	"errors"
-	"io/ioutil"
 	"os"
 
 	"github.com/oholubovskyi/gses3/config"
+	"github.com/oholubovskyi/gses3/subscription/models"
 )
 
 type SubscriptionRepository struct {
@@ -26,13 +26,15 @@ func (s *SubscriptionRepository) GetAllEmails() ([]string, error) {
 	}
 	defer file.Close()
 
-	jsonBytes, err := ioutil.ReadAll(file)
+	decoder := json.NewDecoder(file)
+	var subscriptionData models.SubscriptionData
 
-	var emails []string
-	err = json.Unmarshal(jsonBytes, &emails)
+	err = decoder.Decode(&subscriptionData)
 	if err != nil {
 		return nil, err
 	}
+
+	var emails = subscriptionData.Emails
 
 	return emails, nil
 }
@@ -48,7 +50,7 @@ func (s *SubscriptionRepository) IsEmailExist(email string) (*bool, error) {
 }
 
 func (s *SubscriptionRepository) AddEmail(email string) error {
-	emails, err := s.GetAllEmails()	
+	emails, err := s.GetAllEmails()
 	if err != nil {
 		return err
 	}
@@ -73,17 +75,12 @@ func saveToFile(path string, emails []string) error {
 	}
 	defer subscriptionsFile.Close()
 
-	emailsJson, err := json.Marshal(emails)
-	if err != nil {
-		return err
-	}
+	encoder := json.NewEncoder(subscriptionsFile)
 
-	_, err = subscriptionsFile.Write(emailsJson)
-	if err != nil {
-		return err
+	var subscriptionData = &models.SubscriptionData{
+		Emails: emails,
 	}
-
-	err = subscriptionsFile.Sync()
+	err = encoder.Encode(subscriptionData)
 	if err != nil {
 		return err
 	}

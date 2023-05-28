@@ -44,7 +44,7 @@ func loadConfig(file string) (*config.Config, error) {
 }
 
 func registerSubscriptionRoutes(config config.Config) {
-	var subscriptionHandler = subscriptionHandlerPkg.NewSubscriptionHandler(*subscriptionSvcPkg.NewSubscriptionService(config, subscriptionRepoPkg.SubscriptionRepository{}))
+	var subscriptionHandler = subscriptionHandlerPkg.NewSubscriptionHandler(*subscriptionSvcPkg.NewSubscriptionService(config, *subscriptionRepoPkg.NewSubscriptionRepository(config)))
 
 	http.HandleFunc(config.Routes.Subscribe, subscriptionHandler.Subcribe)
 	http.HandleFunc(config.Routes.SendEmails, subscriptionHandler.SendEmails)

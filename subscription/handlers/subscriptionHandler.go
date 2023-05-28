@@ -20,7 +20,7 @@ func (s *SubscriptionHandler) Subcribe(w http.ResponseWriter, req *http.Request)
 	var email = req.FormValue("email")
 	var err = s.subscribtionSvc.Subscribe(email)
 
-	if err == nil {
+	if err != nil {
 		w.WriteHeader(http.StatusConflict)
 		return
 	}
