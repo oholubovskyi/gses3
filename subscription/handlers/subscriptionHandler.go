@@ -17,6 +17,11 @@ func NewSubscriptionHandler(subscribtionSvc services.SubscriptionService) *Subsc
 }
 
 func (s *SubscriptionHandler) Subcribe(w http.ResponseWriter, req *http.Request) {
+	if req.Method != http.MethodPost {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
 	var email = req.FormValue("email")
 	var err = s.subscribtionSvc.Subscribe(email)
 
@@ -29,6 +34,11 @@ func (s *SubscriptionHandler) Subcribe(w http.ResponseWriter, req *http.Request)
 }
 
 func (s *SubscriptionHandler) SendEmails(w http.ResponseWriter, req *http.Request) {
+	if req.Method != http.MethodPost {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
 	s.subscribtionSvc.SendEmails()
 	w.WriteHeader(http.StatusOK)
 }
