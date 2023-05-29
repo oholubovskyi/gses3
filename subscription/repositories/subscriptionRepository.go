@@ -69,7 +69,7 @@ func (s *SubscriptionRepository) AddEmail(email string) error {
 }
 
 func saveToFile(path string, emails []string) error {
-	subscriptionsFile, err := os.Open(path)
+	subscriptionsFile, err := os.OpenFile(path, os.O_CREATE, os.ModePerm)
 	if err != nil {
 		return err
 	}
