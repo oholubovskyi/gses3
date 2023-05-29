@@ -6,18 +6,24 @@ import (
 	"net/smtp"
 
 	"github.com/oholubovskyi/gses3/config"
+	"github.com/oholubovskyi/gses3/rate/services"
 	"github.com/oholubovskyi/gses3/subscription/repositories"
 )
 
 type SubscriptionService struct {
 	config           config.Config
 	subscribtionRepo repositories.SubscriptionRepository
+	rateSvc          services.RateService
 }
 
-func NewSubscriptionService(config config.Config, subscribtionRep repositories.SubscriptionRepository) *SubscriptionService {
+func NewSubscriptionService(
+	config config.Config,
+	subscribtionRep repositories.SubscriptionRepository,
+	rateSvc services.RateService) *SubscriptionService {
 	return &SubscriptionService{
 		config:           config,
 		subscribtionRepo: subscribtionRep,
+		rateSvc:          rateSvc,
 	}
 }
 
@@ -46,7 +52,10 @@ func (s *SubscriptionService) SendEmails() error {
 		return err
 	}
 
-	var btcRate = 1.0
+	btcRate, err := s.rateSvc.GetBtcRate()
+	if err != nil {
+		return err
+	}
 
 	err = SendEmails(s.config, emails, fmt.Sprintf("%f", btcRate))
 	if err != nil {
